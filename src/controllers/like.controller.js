@@ -1,5 +1,6 @@
 import mongoose, {isValidObjectId} from "mongoose"
 import {Like} from "../models/like.model.js"
+import {Video} from "../models/video.model.js"
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
@@ -19,6 +20,15 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     if (like) {
 
         await Like.findByIdAndDelete(like._id)
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                {liked: false},
+                "Video unliked successfully"
+            )
+        )
     }
 
     await Like.create({
@@ -86,8 +96,8 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
 const toggleTweetLike = asyncHandler(async (req, res) => {
     const {tweetId} = req.params
     //TODO: toggle like on tweet
-    if (!isValidObjectId(commentId)) {
-        throw new ApiError(400, "Invalid comment ID")
+    if (!isValidObjectId(tweetId)) {
+        throw new ApiError(400, "Invalid tweet ID")
     }
 
     const like = await Like.findOne({

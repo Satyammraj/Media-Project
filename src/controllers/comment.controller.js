@@ -8,13 +8,14 @@ const getVideoComments = asyncHandler(async (req, res) => {
     //TODO: get all comments for a video
     const {videoId} = req.params
     const {page = 1, limit = 10} = req.query
+    const skip = (page - 1) * limit
     if (!mongoose.Types.ObjectId.isValid(videoId)) {
         throw new ApiError(400, "Invalid video ID")
     }
     const comments = await Comment.find({
         video: videoId
     })
-    .populate("owner", "username avatar")
+    .populate("owner", "username fullName avatar")
     .skip(skip)
     .limit(limit)
 
