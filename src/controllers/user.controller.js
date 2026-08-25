@@ -38,7 +38,7 @@ const registerUser = asyncHandler(async (req,res,next)=>{
     const {fullName, email, username, password }=req.body
     console.log("User details from frontend:", {fullName, email, username, password})
 
-    if([fullName, email, username, password].some((field) => field.trim() === "")){
+    if([fullName, email, username, password].some((field) => !field?.trim())){
         throw new ApiError(400,"All fields are required")    
     }
 
@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async (req,res,next)=>{
     }
     //console.log(req.files)
 
-    const avatarLocalPath = req.files?.avatar[0]?.path;
+    const avatarLocalPath = req.files?.avatar?.[0]?.path;
     //const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
     let coverImageLocalPath;
@@ -202,7 +202,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             secure: true
         }
     
-        const {accessToken, newRefreshToken} = await generateAccessAndRefreshToken(user._id)
+        const {accessToken, refreshToken: newRefreshToken} = await generateAccessAndRefreshToken(user._id)
     
         return res
         .status(200)
@@ -216,7 +216,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             )
         )
     } catch (error) {
-        throw new ApiError(401, error?.$or?.message || "Invalid refresh token")
+        throw new ApiError(401, error?.message || "Invalid refresh token")
     }
 })
 
@@ -321,7 +321,7 @@ const updateUserCoverImage = asyncHandler(async(req,res)=>{
             }
         },
         {new: true}
-    ).select(-password)
+    ).select("-password -refreshToken")
     return res
     .status(200)
     .json(new ApiResponse(200, user,"Cover image updates succesfully"))
@@ -337,13 +337,13 @@ const getUserChannelProfile =  asyncHandler(async(req,res)=>{
     const channel = await User.aggregate([
         {
            $match:{
-               username: username?.toLowerCase
+               username: username.toLowerCase()
            }
         },
         {
             $lookup:{
                 from:"subscriptions",
-                localField: _id,
+                localField: "_id",
                 foreignField: "channel",
                 as:"subscribers"
             }
@@ -351,7 +351,7 @@ const getUserChannelProfile =  asyncHandler(async(req,res)=>{
         {
             $lookup:{
                 from:"subscriptions",
-                localField: _id,
+                localField: "_id",
                 foreignField: "subscriber",
                 as:"subscribedTo"
             }
@@ -454,7 +454,7 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
     .json(
         new ApiResponse(
             200,
-            user[0].getWatchHistory,
+            user[0]?.watchHistory || [],
             "Watch history fetched succesfully"
         )
     )

@@ -89,7 +89,6 @@ const getAllVideos = asyncHandler(async (req, res) => {
 const publishAVideo = asyncHandler(async (req, res) => {
     const { title, description} = req.body
     // TODO: get video, upload to cloudinary, create video
-    const {title, description} = req.body
 
      if (!title?.trim()) {
         throw new ApiError(
@@ -232,7 +231,7 @@ const updateVideo = asyncHandler(async (req, res) => {
         video.description = description.trim()
     }
 
-    const thumbnail = req.files?.thumbnail?.[0]?.path
+    const thumbnail = req.file?.path
 
     if (thumbnail) {
 
@@ -248,6 +247,18 @@ const updateVideo = asyncHandler(async (req, res) => {
 
         video.thumbnail = uploadedThumbnail.url
     }
+
+    await video.save()
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                 200,
+                thumbnail,
+                "Thumbnail publish status updated successfully"
+            )
+        )
 
 
 
@@ -329,11 +340,11 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
 
     await video.save()
 
-    return res
+   return res
         .status(200)
         .json(
             new ApiResponse(
-                200,
+                 200,
                 video,
                 "Video publish status updated successfully"
             )
