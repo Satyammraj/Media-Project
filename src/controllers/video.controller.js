@@ -13,7 +13,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
     const pageNumber = Number(page)
     const limitNumber = Number(limit)
 
-    if (pageNumber <= 0 || limitNumber <= 0) {
+    if (!Number.isInteger(pageNumber) || !Number.isInteger(limitNumber) || pageNumber <= 0 || limitNumber <= 0) {
         throw new ApiError(
             400,
             "Page and limit must be greater than 0"
@@ -170,7 +170,10 @@ const getVideoById = asyncHandler(async (req, res) => {
         )
     }
 
-    const video = await Video.findById(videoId)
+    const video = await Video.findOne({
+        _id: videoId,
+        isPublished: true
+    })
 
     if (!video) {
         throw new ApiError(
@@ -255,8 +258,8 @@ const updateVideo = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(
                  200,
-                thumbnail,
-                "Thumbnail publish status updated successfully"
+                video,
+                "Video updated successfully"
             )
         )
 

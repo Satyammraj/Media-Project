@@ -1,5 +1,6 @@
 import mongoose, {isValidObjectId} from "mongoose"
 import {Playlist} from "../models/playlist.model.js"
+import {Video} from "../models/video.model.js"
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
@@ -68,6 +69,10 @@ const getPlaylistById = asyncHandler(async (req, res) => {
     
     if (!playlist) {
         throw new ApiError(404, "Playlist not found")
+    }
+
+    if (!await Video.exists({_id: videoId})) {
+        throw new ApiError(404, "Video not found")
     }
 
     return res

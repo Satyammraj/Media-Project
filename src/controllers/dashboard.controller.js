@@ -14,6 +14,10 @@ const getChannelStats = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Invalid channel ID")
     }
 
+    if (channelId !== req.user._id.toString()) {
+        throw new ApiError(403, "You are not authorized to view this dashboard")
+    }
+
     const videos = await Video.find({
         owner: channelId
     })
@@ -59,6 +63,10 @@ const getChannelVideos = asyncHandler(async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(channelId)) {
         throw new ApiError(400, "Invalid channel ID")
+    }
+
+    if (channelId !== req.user._id.toString()) {
+        throw new ApiError(403, "You are not authorized to view this dashboard")
     }
 
     const videos = await Video.find({

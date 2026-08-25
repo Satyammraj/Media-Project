@@ -18,13 +18,12 @@ const generateAccessAndRefreshToken = async (userId)=>{
         return {accessToken, refreshToken}
 
     }catch(error){
-        console.log("TOKEN ERROR:", error);
         throw new ApiError(500,"Something went wrong while generating refresh and access token")
     }
 }
 
 
-const registerUser = asyncHandler(async (req,res,next)=>{
+const registerUser = asyncHandler(async (req,res)=>{
     //get user details from frontend
     //validation - not empty
     //chech if user already exists: usernam, email
@@ -36,8 +35,6 @@ const registerUser = asyncHandler(async (req,res,next)=>{
     //return response
 
     const {fullName, email, username, password }=req.body
-    console.log("User details from frontend:", {fullName, email, username, password})
-
     if([fullName, email, username, password].some((field) => !field?.trim())){
         throw new ApiError(400,"All fields are required")    
     }
@@ -94,7 +91,7 @@ const registerUser = asyncHandler(async (req,res,next)=>{
 
 })
 
-const loginUser = asyncHandler(async (req,res,next)=>{
+const loginUser = asyncHandler(async (req,res)=>{
      //req body->data
      // username or email
      //find the user in db
@@ -103,9 +100,7 @@ const loginUser = asyncHandler(async (req,res,next)=>{
      //send cookie
 
      const {email, username, password} = req.body
-     console.log(email);
-
-     if(!username && !email){
+    if((!username && !email) || !password?.trim()){
         throw new ApiError(400,"Username or email is required")
 
      }
@@ -129,7 +124,7 @@ const loginUser = asyncHandler(async (req,res,next)=>{
 
     const options = {
         httpOnly:true,
-        secure: true
+        secure: process.env.NODE_ENV === "production"
     }
 
     return res
@@ -164,13 +159,13 @@ const logoutUser = asyncHandler(async (req, res) => {
     
     const options = {
         httpOnly:true,
-        secure: true
+        secure: process.env.NODE_ENV === "production"
     }
 
     return res
         .status(200)
-        .clearCookie("accessToken")
-        .clearCookie("refreshToken")
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
         .json(new ApiResponse(200, {}, "User logged out successfully"))
 })
 
@@ -199,7 +194,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     
         const options = {
             httpOnly: true,
-            secure: true
+            secure: process.env.NODE_ENV === "production"
         }
     
         const {accessToken, refreshToken: newRefreshToken} = await generateAccessAndRefreshToken(user._id)
@@ -227,7 +222,7 @@ const changeCurrentUserPassword = asyncHandler(async(req,res)=>{
     const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
     
     if(!isPasswordCorrect){
-        throw new ApiError(100, "Invalid old passowrd")
+        throw new ApiError(401, "Invalid old password")
     }
 
     user.password = newPassword
@@ -282,7 +277,7 @@ const updateUserAvatar = asyncHandler(async(req,res)=>{
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
 
-    if(!avatar.url){
+    if(!avatar?.url){
         throw new ApiError(400,"Error while uploading on avatar")
     }
 
@@ -309,7 +304,7 @@ const updateUserCoverImage = asyncHandler(async(req,res)=>{
 
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
-    if(!coverImage.url){
+    if(!coverImage?.url){
         throw new ApiError(400,"Error while uploading on cover image")
     }
 
@@ -366,7 +361,7 @@ const getUserChannelProfile =  asyncHandler(async(req,res)=>{
                 },
                 isSubscribed:{
                     $cond:{
-                        if:{$in:[req.user?._id,"$subscribers.subscriber"]},
+                        if:{$in:[new mongoose.Types.ObjectId(req.user._id),"$subscribers.subscriber"]},
                         then: true,
                         else: false,
                         

@@ -23,5 +23,18 @@ const likeSchema = new Schema(
     },{timestamps: true}
 )
 
+likeSchema.index(
+    {video: 1, likedBy: 1},
+    {unique: true, partialFilterExpression: {video: {$exists: true}, likedBy: {$exists: true}}}
+)
+likeSchema.index(
+    {comment: 1, likedBy: 1},
+    {unique: true, partialFilterExpression: {comment: {$exists: true}, likedBy: {$exists: true}}}
+)
+likeSchema.index(
+    {tweet: 1, likedBy: 1},
+    {unique: true, partialFilterExpression: {tweet: {$exists: true}, likedBy: {$exists: true}}}
+)
+
 
 export const Like = mongoose.model("Like",likeSchema)

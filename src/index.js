@@ -3,12 +3,13 @@ dns.setDefaultResultOrder("ipv4first");
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 import dotenv from "dotenv";
-import connectDB from "./db/index.js";
-import { app } from "./app.js";
 
 dotenv.config({
     path: "./.env"
 });
+
+const { default: connectDB } = await import("./db/index.js");
+const { app } = await import("./app.js");
 
 connectDB()
     .then(() => {

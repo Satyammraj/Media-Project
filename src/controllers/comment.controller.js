@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import {Comment} from "../models/comment.model.js"
+import {Video} from "../models/video.model.js"
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
@@ -8,7 +9,14 @@ const getVideoComments = asyncHandler(async (req, res) => {
     //TODO: get all comments for a video
     const {videoId} = req.params
     const {page = 1, limit = 10} = req.query
-    const skip = (page - 1) * limit
+    const pageNumber = Number(page)
+    const limitNumber = Number(limit)
+
+    if (!Number.isInteger(pageNumber) || !Number.isInteger(limitNumber) || pageNumber <= 0 || limitNumber <= 0) {
+        throw new ApiError(400, "Page and limit must be greater than 0")
+    }
+
+    const skip = (pageNumber - 1) * limitNumber
     if (!mongoose.Types.ObjectId.isValid(videoId)) {
         throw new ApiError(400, "Invalid video ID")
     }
@@ -17,7 +25,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
     })
     .populate("owner", "username fullName avatar")
     .skip(skip)
-    .limit(limit)
+    .limit(limitNumber)
 
     return res
         .status(200)
@@ -42,6 +50,10 @@ const addComment = asyncHandler(async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(videoId)) {
         throw new ApiError(400, "Invalid video ID")
+    }
+
+    if (!await Video.exists({_id: videoId})) {
+        throw new ApiError(404, "Video not found")
     }
     const comment = await Comment.create({
         content: content.trim(),
