@@ -1,39 +1,22 @@
-import { useEffect, useState } from "react";
-import api from "./services/api";
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import VideoDetails from "./pages/VideoDetails";
+import Dashboard from "./pages/Dashboard";
+import Upload from "./pages/Upload";
 
 function App() {
-    const [message, setMessage] = useState("Connecting...");
-    const [error, setError] = useState("");
-
-    useEffect(() => {
-        const testBackend = async () => {
-            try {
-                const response = await api.get("/healthcheck");
-
-                console.log("Backend response:", response.data);
-
-                setMessage(response.data.message);
-            } catch (error) {
-                console.error("Backend error:", error);
-                console.error("Response:", error.response);
-                console.error("Request:", error.request);
-                console.error("Message:", error.message);
-
-                setError(error.message);
-            }
-        };
-
-        testBackend();
-    }, []);
-
     return (
-        <div>
-            <h1>Media Project</h1>
+        <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-            <p>{message}</p>
-
-            {error && <p>{error}</p>}
-        </div>
+            <Route path="/" element={<Home />} />
+            <Route path="/watch/:videoId" element={<VideoDetails />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/upload" element={<Upload />} />
+        </Routes>
     );
 }
 
