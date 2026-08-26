@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap");
 
 /* =========================================================
    DESIGN SYSTEM
@@ -38,6 +38,12 @@
     --radius-sm: 7px;
     --radius-md: 12px;
     --radius-lg: 18px;
+
+    /* ── NEW: added for the editorial/zine-style redesign work ── */
+    --display-font: "Space Grotesk", sans-serif;
+    --mono-font: "DM Mono", monospace;
+    --paper: #f4f0e6;
+    /* ───────────────────────────────────────────────────────── */
 
     font:
         16px / 1.5 "DM Sans",
@@ -243,15 +249,6 @@ p {
 
 /* =========================================================
    APP BACKGROUND
-   NOTE: layout (display/grid-template/areas) for .app-frame,
-   .sidebar, .topbar, and .shell-content is owned exclusively by
-   AppShell.jsx's embedded styles. This block only supplies the
-   decorative background gradient and must never add position,
-   width, margin, or display rules for those selectors again —
-   doing so previously fought AppShell's grid layout (a fixed
-   sidebar + margin-left content offset stacked on top of an
-   already-correctly-sized grid track) and was the cause of
-   content being pushed out of alignment.
    ========================================================= */
 
 .app-frame {
@@ -831,10 +828,6 @@ p {
 
 /* =========================================================
    SIDEBAR
-   Positioning/sizing (fixed vs. grid track, width, collapse
-   behavior) lives solely in AppShell.jsx's embedded styles —
-   this block only supplies label/link visual treatment that
-   AppShell's own styles don't otherwise cover.
    ========================================================= */
 
 .sidebar-section {
@@ -948,11 +941,6 @@ p {
 
 /* =========================================================
    COLLAPSED SIDEBAR
-   Width/margin swapping between expanded and collapsed states
-   is handled by AppShell.jsx via --sidebar-w /
-   --sidebar-w-collapsed on the grid-template-columns of
-   .app-frame.sidebar-collapsed. Only label/content hiding for
-   the collapsed state lives here.
    ========================================================= */
 
 .sidebar-collapsed .sidebar-label,
@@ -976,9 +964,6 @@ p {
 
 /* =========================================================
    MAIN CONTENT
-   Positioning (grid-area: content) lives in AppShell.jsx.
-   This block only supplies the inner content max-width/padding
-   shared by page components mounted inside .shell-content.
    ========================================================= */
 
 .page-content,
@@ -2346,12 +2331,6 @@ select {
         padding: 2px;
     }
 
-    /* .sidebar hide + .shell-content margin-reset removed here —
-       AppShell.jsx already hides the sidebar and switches to a
-       single-column grid at its own 900px breakpoint, so this
-       page's mobile layout kicks in before 720px is ever reached.
-       See flag below re: reconciling the two breakpoints. */
-
     .shell-content {
         padding-bottom: 74px;
     }
@@ -2684,7 +2663,6 @@ select {
 
 /* =========================================================
    SETTINGS PAGE — UPDATED
-   Compatible with the revised Settings.jsx
    ========================================================= */
 
 .settings-page {
@@ -3071,7 +3049,6 @@ body {
     overflow: visible;
 }
 
-/* Channel page specifically */
 .channel-page {
     width: 100%;
     max-width: 1500px;

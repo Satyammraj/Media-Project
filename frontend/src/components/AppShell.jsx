@@ -8,7 +8,9 @@ import {
 } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
+
 import Avatar from "./Avatar";
+import SiteFooter from "./SiteFooter";
 
 
 const navItems = [
@@ -60,7 +62,8 @@ const AppShell = () => {
     const submit = (event) => {
         event.preventDefault();
 
-        const trimmedSearch = search.trim();
+        const trimmedSearch =
+            search.trim();
 
         if (!trimmedSearch) {
             navigate("/");
@@ -77,6 +80,7 @@ const AppShell = () => {
 
     const clearSearch = () => {
         setSearch("");
+
         navigate("/");
     };
 
@@ -168,12 +172,14 @@ const AppShell = () => {
                     onSubmit={submit}
                     role="search"
                 >
+
                     <span
                         className="search-icon"
                         aria-hidden="true"
                     >
                         ⌕
                     </span>
+
 
                     <input
                         value={search}
@@ -185,6 +191,7 @@ const AppShell = () => {
                         placeholder="Search videos, channels..."
                         aria-label="Search videos"
                     />
+
 
                     {search && (
                         <button
@@ -198,6 +205,7 @@ const AppShell = () => {
                         </button>
                     )}
 
+
                     <button
                         type="submit"
                         className="search-submit"
@@ -205,6 +213,7 @@ const AppShell = () => {
                     >
                         Search
                     </button>
+
                 </form>
 
 
@@ -214,6 +223,7 @@ const AppShell = () => {
 
                     {user ? (
                         <>
+
                             {/* Upload */}
 
                             <Link
@@ -242,6 +252,7 @@ const AppShell = () => {
                                 }
                                 title="Account menu"
                             >
+
                                 <Avatar
                                     user={user}
                                     size="small"
@@ -252,6 +263,7 @@ const AppShell = () => {
                                         ? "⌃"
                                         : "⌄"}
                                 </span>
+
                             </button>
 
 
@@ -259,6 +271,7 @@ const AppShell = () => {
 
                             {menuOpen && (
                                 <>
+
                                     <button
                                         type="button"
                                         className="profile-overlay"
@@ -270,6 +283,7 @@ const AppShell = () => {
                                         aria-label="Close account menu"
                                     />
 
+
                                     <div className="profile-menu">
 
                                         <div className="profile-menu-header">
@@ -279,15 +293,19 @@ const AppShell = () => {
                                                 size="medium"
                                             />
 
+
                                             <div>
+
                                                 <strong>
                                                     {user.fullName ||
                                                         user.username}
                                                 </strong>
 
+
                                                 <span>
                                                     @{user.username}
                                                 </span>
+
                                             </div>
 
                                         </div>
@@ -304,11 +322,13 @@ const AppShell = () => {
                                                 )
                                             }
                                         >
+
                                             <span>
                                                 ◉
                                             </span>
 
                                             Profile
+
                                         </Link>
 
 
@@ -320,11 +340,13 @@ const AppShell = () => {
                                                 )
                                             }
                                         >
+
                                             <span>
                                                 ▦
                                             </span>
 
                                             Dashboard
+
                                         </Link>
 
 
@@ -336,11 +358,13 @@ const AppShell = () => {
                                                 )
                                             }
                                         >
+
                                             <span>
                                                 ⚙
                                             </span>
 
                                             Settings
+
                                         </Link>
 
 
@@ -354,19 +378,25 @@ const AppShell = () => {
                                                 handleLogout
                                             }
                                         >
+
                                             <span>
                                                 ↪
                                             </span>
 
                                             Log out
+
                                         </button>
 
                                     </div>
+
                                 </>
                             )}
+
                         </>
                     ) : (
+
                         <>
+
                             <Link
                                 className="button button-ghost"
                                 to="/login"
@@ -374,13 +404,16 @@ const AppShell = () => {
                                 Log in
                             </Link>
 
+
                             <Link
                                 className="button"
                                 to="/register"
                             >
                                 Join
                             </Link>
+
                         </>
+
                     )}
 
                 </div>
@@ -402,7 +435,7 @@ const AppShell = () => {
 
 
                     {navItems.map(
-                        ([path, label]) => (
+                        ([path, label], index) => (
                             <NavLink
                                 key={path}
                                 className={
@@ -414,13 +447,26 @@ const AppShell = () => {
                                 }
                                 title={label}
                             >
+
+                                <span className="side-link-number">
+                                    {String(
+                                        index + 1
+                                    ).padStart(
+                                        2,
+                                        "0"
+                                    )}
+                                </span>
+
+
                                 <span className="side-link-icon">
                                     {navIcon(path)}
                                 </span>
 
+
                                 <span className="side-link-label">
                                     {label}
                                 </span>
+
                             </NavLink>
                         )
                     )}
@@ -445,13 +491,21 @@ const AppShell = () => {
                             to="/dashboard"
                             title="Studio"
                         >
+
+                            <span className="side-link-number">
+                                06
+                            </span>
+
+
                             <span className="side-link-icon">
                                 ◈
                             </span>
 
+
                             <span className="side-link-label">
                                 Studio
                             </span>
+
                         </NavLink>
 
 
@@ -462,13 +516,21 @@ const AppShell = () => {
                             to="/upload"
                             title="Upload"
                         >
+
+                            <span className="side-link-number">
+                                07
+                            </span>
+
+
                             <span className="side-link-icon">
                                 ＋
                             </span>
 
+
                             <span className="side-link-label">
                                 Upload
                             </span>
+
                         </NavLink>
 
                     </div>
@@ -478,9 +540,11 @@ const AppShell = () => {
                 {/* Sidebar footer */}
 
                 <div className="sidebar-footer">
+
                     <span className="brand-accent">
                         Videoly
                     </span>
+
                 </div>
 
             </aside>
@@ -491,7 +555,16 @@ const AppShell = () => {
             ================================================= */}
 
             <main className="shell-content">
+
                 <Outlet />
+
+
+                {/* =================================================
+                    SITE FOOTER
+                ================================================= */}
+
+                <SiteFooter />
+
             </main>
 
 
@@ -503,6 +576,7 @@ const AppShell = () => {
                 className="mobile-nav"
                 aria-label="Mobile navigation"
             >
+
                 {navItems
                     .slice(0, 4)
                     .map(
@@ -517,16 +591,20 @@ const AppShell = () => {
                                     mobileLinkClass
                                 }
                             >
+
                                 <span className="mobile-nav-icon">
                                     {navIcon(path)}
                                 </span>
 
+
                                 <span>
                                     {label}
                                 </span>
+
                             </NavLink>
                         )
                     )}
+
             </nav>
 
         </div>
@@ -543,7 +621,7 @@ const AppShellStyles = () => (
 
         /* =====================================================
            VARIABLES
-           ===================================================== */
+        ===================================================== */
 
         :root {
             --ink: #14151a;
@@ -551,12 +629,22 @@ const AppShellStyles = () => (
             --surface-raised: #23252e;
 
             --accent: #cf9d56;
-            --accent-soft: rgba(207, 157, 86, 0.14);
+            --accent-soft: rgba(
+                207,
+                157,
+                86,
+                0.14
+            );
 
             --text: #f1efe9;
             --text-muted: #9a9ba6;
 
-            --border: rgba(255, 255, 255, 0.08);
+            --border: rgba(
+                255,
+                255,
+                255,
+                0.08
+            );
 
             --danger: #e2685c;
 
@@ -564,7 +652,13 @@ const AppShellStyles = () => (
             --radius-md: 12px;
 
             --shadow-menu:
-                0 16px 40px rgba(0, 0, 0, 0.45);
+                0 16px 40px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.45
+                );
 
             --topbar-h: 64px;
 
@@ -572,7 +666,12 @@ const AppShellStyles = () => (
             --sidebar-w-collapsed: 76px;
 
             --ease:
-                cubic-bezier(0.4, 0, 0.2, 1);
+                cubic-bezier(
+                    0.4,
+                    0,
+                    0.2,
+                    1
+                );
         }
 
 
@@ -595,17 +694,24 @@ const AppShellStyles = () => (
 
             grid-template-columns:
                 var(--sidebar-w)
-                minmax(0, 1fr);
+                minmax(
+                    0,
+                    1fr
+                );
 
             grid-template-rows:
                 var(--topbar-h)
-                minmax(0, 1fr);
+                minmax(
+                    0,
+                    1fr
+                );
 
             grid-template-areas:
                 "topbar topbar"
                 "sidebar content";
 
-            background: var(--ink);
+            background:
+                var(--ink);
 
             overflow: hidden;
 
@@ -619,7 +725,10 @@ const AppShellStyles = () => (
         .app-frame.sidebar-collapsed {
             grid-template-columns:
                 var(--sidebar-w-collapsed)
-                minmax(0, 1fr);
+                minmax(
+                    0,
+                    1fr
+                );
         }
 
 
@@ -637,12 +746,16 @@ const AppShellStyles = () => (
 
             gap: 16px;
 
-            padding: 0 20px;
+            padding:
+                0
+                20px;
 
-            background: var(--surface);
+            background:
+                var(--surface);
 
             border-bottom:
-                1px solid var(--border);
+                1px solid
+                var(--border);
 
             z-index: 100;
         }
@@ -653,31 +766,44 @@ const AppShellStyles = () => (
             height: 40px;
 
             display: inline-flex;
+
             align-items: center;
             justify-content: center;
 
             flex-shrink: 0;
 
             border: none;
-            border-radius: var(--radius-sm);
 
-            background: transparent;
+            border-radius:
+                var(--radius-sm);
 
-            color: var(--text-muted);
+            background:
+                transparent;
+
+            color:
+                var(--text-muted);
 
             font-size: 19px;
 
             cursor: pointer;
 
             transition:
-                background 0.15s var(--ease),
-                color 0.15s var(--ease);
+                background
+                0.15s
+                var(--ease),
+
+                color
+                0.15s
+                var(--ease);
         }
 
 
         .icon-button:hover {
-            background: var(--surface-raised);
-            color: var(--text);
+            background:
+                var(--surface-raised);
+
+            color:
+                var(--text);
         }
 
 
@@ -687,6 +813,7 @@ const AppShellStyles = () => (
 
         .brand {
             display: flex;
+
             align-items: center;
 
             gap: 10px;
@@ -702,6 +829,7 @@ const AppShellStyles = () => (
             height: 36px;
 
             display: inline-flex;
+
             align-items: center;
             justify-content: center;
 
@@ -714,19 +842,27 @@ const AppShellStyles = () => (
                     #a97c3c
                 );
 
-            color: #14151a;
+            color:
+                #14151a;
 
             font-size: 16px;
+
             font-weight: 800;
 
             box-shadow:
                 0 5px 18px
-                rgba(207, 157, 86, 0.14);
+                rgba(
+                    207,
+                    157,
+                    86,
+                    0.14
+                );
         }
 
 
         .brand-name {
-            color: var(--text);
+            color:
+                var(--text);
 
             font-family:
                 "Space Grotesk",
@@ -736,9 +872,11 @@ const AppShellStyles = () => (
                 sans-serif;
 
             font-size: 18px;
+
             font-weight: 700;
 
-            letter-spacing: -0.035em;
+            letter-spacing:
+                -0.035em;
         }
 
 
@@ -749,16 +887,23 @@ const AppShellStyles = () => (
         .search {
             min-width: 0;
 
-            width: min(620px, 100%);
+            width:
+                min(
+                    620px,
+                    100%
+                );
 
             height: 44px;
 
             display: flex;
+
             align-items: center;
 
             flex: 1;
 
-            margin: 0 auto;
+            margin:
+                0
+                auto;
 
             padding:
                 0
@@ -766,21 +911,29 @@ const AppShellStyles = () => (
                 0
                 16px;
 
-            background: var(--ink);
+            background:
+                var(--ink);
 
             border:
-                1px solid var(--border);
+                1px solid
+                var(--border);
 
             border-radius: 999px;
 
             transition:
-                border-color 0.15s var(--ease),
-                box-shadow 0.15s var(--ease);
+                border-color
+                0.15s
+                var(--ease),
+
+                box-shadow
+                0.15s
+                var(--ease);
         }
 
 
         .search:focus-within {
-            border-color: var(--accent);
+            border-color:
+                var(--accent);
 
             box-shadow:
                 0 0 0 3px
@@ -793,7 +946,8 @@ const AppShellStyles = () => (
 
             margin-right: 10px;
 
-            color: var(--text-muted);
+            color:
+                var(--text-muted);
 
             font-size: 15px;
         }
@@ -807,18 +961,22 @@ const AppShellStyles = () => (
             height: 100%;
 
             border: none;
+
             outline: none;
 
-            background: transparent;
+            background:
+                transparent;
 
-            color: var(--text);
+            color:
+                var(--text);
 
             font-size: 14px;
         }
 
 
         .search input::placeholder {
-            color: var(--text-muted);
+            color:
+                var(--text-muted);
         }
 
 
@@ -827,17 +985,21 @@ const AppShellStyles = () => (
             height: 28px;
 
             display: inline-flex;
+
             align-items: center;
             justify-content: center;
 
             flex-shrink: 0;
 
             border: none;
+
             border-radius: 50%;
 
-            background: transparent;
+            background:
+                transparent;
 
-            color: var(--text-muted);
+            color:
+                var(--text-muted);
 
             font-size: 18px;
 
@@ -846,8 +1008,11 @@ const AppShellStyles = () => (
 
 
         .search-clear:hover {
-            background: var(--surface-raised);
-            color: var(--text);
+            background:
+                var(--surface-raised);
+
+            color:
+                var(--text);
         }
 
 
@@ -856,29 +1021,43 @@ const AppShellStyles = () => (
 
             flex-shrink: 0;
 
-            padding: 0 18px;
+            padding:
+                0
+                18px;
 
             border: none;
+
             border-radius: 999px;
 
-            background: var(--surface-raised);
+            background:
+                var(--surface-raised);
 
-            color: var(--text);
+            color:
+                var(--text);
 
             font-size: 13px;
+
             font-weight: 600;
 
             cursor: pointer;
 
             transition:
-                background 0.15s var(--ease),
-                color 0.15s var(--ease);
+                background
+                0.15s
+                var(--ease),
+
+                color
+                0.15s
+                var(--ease);
         }
 
 
         .search-submit:hover {
-            background: var(--accent);
-            color: #14151a;
+            background:
+                var(--accent);
+
+            color:
+                #14151a;
         }
 
 
@@ -890,6 +1069,7 @@ const AppShellStyles = () => (
             position: relative;
 
             display: flex;
+
             align-items: center;
 
             gap: 10px;
@@ -902,37 +1082,52 @@ const AppShellStyles = () => (
             height: 38px;
 
             display: inline-flex;
+
             align-items: center;
 
             gap: 6px;
 
-            padding: 0 16px;
+            padding:
+                0
+                16px;
 
             border-radius: 999px;
 
-            background: var(--accent-soft);
+            background:
+                var(--accent-soft);
 
-            color: var(--accent);
+            color:
+                var(--accent);
 
             font-size: 13px;
+
             font-weight: 600;
 
             text-decoration: none;
 
             transition:
-                background 0.15s var(--ease),
-                color 0.15s var(--ease);
+                background
+                0.15s
+                var(--ease),
+
+                color
+                0.15s
+                var(--ease);
         }
 
 
         .upload-link:hover {
-            background: var(--accent);
-            color: #14151a;
+            background:
+                var(--accent);
+
+            color:
+                #14151a;
         }
 
 
         .profile-trigger {
             display: flex;
+
             align-items: center;
 
             gap: 6px;
@@ -944,24 +1139,31 @@ const AppShellStyles = () => (
                 4px;
 
             border: none;
+
             border-radius: 999px;
 
-            background: transparent;
+            background:
+                transparent;
 
             cursor: pointer;
 
             transition:
-                background 0.15s var(--ease);
+                background
+                0.15s
+                var(--ease);
         }
 
 
         .profile-trigger:hover {
-            background: var(--surface-raised);
+            background:
+                var(--surface-raised);
         }
 
 
         .profile-chevron {
-            color: var(--text-muted);
+            color:
+                var(--text-muted);
+
             font-size: 11px;
         }
 
@@ -982,7 +1184,8 @@ const AppShellStyles = () => (
 
             border: none;
 
-            background: transparent;
+            background:
+                transparent;
 
             z-index: 110;
 
@@ -1000,10 +1203,12 @@ const AppShellStyles = () => (
 
             padding: 6px;
 
-            background: var(--surface);
+            background:
+                var(--surface);
 
             border:
-                1px solid var(--border);
+                1px solid
+                var(--border);
 
             border-radius:
                 var(--radius-md);
@@ -1021,32 +1226,42 @@ const AppShellStyles = () => (
 
 
         @keyframes menu-in {
+
             from {
                 opacity: 0;
-                transform: translateY(-5px);
+
+                transform:
+                    translateY(-5px);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0);
+
+                transform:
+                    translateY(0);
             }
+
         }
 
 
         .profile-menu-header {
             display: flex;
+
             align-items: center;
 
             gap: 12px;
 
-            padding: 12px 10px;
+            padding:
+                12px
+                10px;
         }
 
 
         .profile-menu-header strong {
             display: block;
 
-            color: var(--text);
+            color:
+                var(--text);
 
             font-size: 14px;
         }
@@ -1057,7 +1272,8 @@ const AppShellStyles = () => (
 
             margin-top: 2px;
 
-            color: var(--text-muted);
+            color:
+                var(--text-muted);
 
             font-size: 12px;
         }
@@ -1066,9 +1282,12 @@ const AppShellStyles = () => (
         .profile-menu-divider {
             height: 1px;
 
-            margin: 6px 4px;
+            margin:
+                6px
+                4px;
 
-            background: var(--border);
+            background:
+                var(--border);
         }
 
 
@@ -1077,6 +1296,7 @@ const AppShellStyles = () => (
             width: 100%;
 
             display: flex;
+
             align-items: center;
 
             gap: 12px;
@@ -1084,11 +1304,15 @@ const AppShellStyles = () => (
             padding: 10px;
 
             border: none;
-            border-radius: var(--radius-sm);
 
-            background: transparent;
+            border-radius:
+                var(--radius-sm);
 
-            color: var(--text);
+            background:
+                transparent;
+
+            color:
+                var(--text);
 
             font-size: 13.5px;
 
@@ -1099,13 +1323,16 @@ const AppShellStyles = () => (
             cursor: pointer;
 
             transition:
-                background 0.15s var(--ease);
+                background
+                0.15s
+                var(--ease);
         }
 
 
         .profile-menu a:hover,
         .profile-menu .logout-button:hover {
-            background: var(--surface-raised);
+            background:
+                var(--surface-raised);
         }
 
 
@@ -1117,17 +1344,20 @@ const AppShellStyles = () => (
 
             text-align: center;
 
-            color: var(--text-muted);
+            color:
+                var(--text-muted);
         }
 
 
         .profile-menu .logout-button {
-            color: var(--danger);
+            color:
+                var(--danger);
         }
 
 
         .profile-menu .logout-button span:first-child {
-            color: var(--danger);
+            color:
+                var(--danger);
         }
 
 
@@ -1142,23 +1372,34 @@ const AppShellStyles = () => (
             min-height: 0;
 
             display: flex;
+
             flex-direction: column;
 
             gap: 22px;
 
-            padding: 18px 12px;
+            padding:
+                18px
+                12px;
 
-            background: var(--surface);
+            background:
+                var(--surface);
 
             border-right:
-                1px solid var(--border);
+                1px solid
+                var(--border);
 
             overflow-x: hidden;
             overflow-y: auto;
 
             scrollbar-width: thin;
+
             scrollbar-color:
-                rgba(255,255,255,0.12)
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                )
                 transparent;
         }
 
@@ -1169,13 +1410,19 @@ const AppShellStyles = () => (
 
 
         .sidebar::-webkit-scrollbar-track {
-            background: transparent;
+            background:
+                transparent;
         }
 
 
         .sidebar::-webkit-scrollbar-thumb {
             background:
-                rgba(255,255,255,0.12);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
 
             border-radius: 999px;
         }
@@ -1183,6 +1430,7 @@ const AppShellStyles = () => (
 
         .sidebar-section {
             display: flex;
+
             flex-direction: column;
 
             gap: 2px;
@@ -1201,14 +1449,18 @@ const AppShellStyles = () => (
                 0
                 12px;
 
-            color: var(--text-muted);
+            color:
+                var(--text-muted);
 
             font-size: 11px;
+
             font-weight: 700;
 
-            letter-spacing: 0.08em;
+            letter-spacing:
+                0.08em;
 
-            text-transform: uppercase;
+            text-transform:
+                uppercase;
         }
 
 
@@ -1218,9 +1470,10 @@ const AppShellStyles = () => (
             min-width: 0;
 
             display: flex;
+
             align-items: center;
 
-            gap: 14px;
+            gap: 10px;
 
             padding:
                 10px
@@ -1229,27 +1482,39 @@ const AppShellStyles = () => (
             border-radius:
                 var(--radius-sm);
 
-            color: var(--text-muted);
+            color:
+                var(--text-muted);
 
             font-size: 14px;
 
             text-decoration: none;
 
             transition:
-                background 0.15s var(--ease),
-                color 0.15s var(--ease);
+                background
+                0.15s
+                var(--ease),
+
+                color
+                0.15s
+                var(--ease);
         }
 
 
         .side-link:hover {
-            background: var(--surface-raised);
-            color: var(--text);
+            background:
+                var(--surface-raised);
+
+            color:
+                var(--text);
         }
 
 
         .side-link.active {
-            background: var(--accent-soft);
-            color: var(--text);
+            background:
+                var(--accent-soft);
+
+            color:
+                var(--text);
         }
 
 
@@ -1259,6 +1524,7 @@ const AppShellStyles = () => (
             position: absolute;
 
             left: -12px;
+
             top: 8px;
             bottom: 8px;
 
@@ -1270,7 +1536,45 @@ const AppShellStyles = () => (
                 3px
                 0;
 
-            background: var(--accent);
+            background:
+                var(--accent);
+        }
+
+
+        /* =====================================================
+           SIDEBAR NUMBERING
+        ===================================================== */
+
+        .side-link-number {
+            width: 20px;
+
+            flex-shrink: 0;
+
+            color:
+                var(--text-muted);
+
+            font-family:
+                "DM Mono",
+                "Courier New",
+                monospace;
+
+            font-size: 10px;
+
+            letter-spacing:
+                0.04em;
+
+            opacity: 0.6;
+
+            text-align: center;
+        }
+
+
+        .side-link.active
+        .side-link-number {
+            color:
+                var(--accent);
+
+            opacity: 0.9;
         }
 
 
@@ -1279,7 +1583,8 @@ const AppShellStyles = () => (
 
             flex-shrink: 0;
 
-            color: currentColor;
+            color:
+                currentColor;
 
             font-size: 16px;
 
@@ -1289,7 +1594,8 @@ const AppShellStyles = () => (
 
         .side-link.active
         .side-link-icon {
-            color: var(--accent);
+            color:
+                var(--accent);
         }
 
 
@@ -1313,20 +1619,20 @@ const AppShellStyles = () => (
 
             flex-shrink: 0;
 
-            padding:
-                12px;
+            padding: 12px;
 
-            border-top:
-                none;
+            border-top: none;
         }
 
 
         .brand-accent {
-            color: var(--text-muted);
+            color:
+                var(--text-muted);
 
             font-size: 12px;
 
-            letter-spacing: 0.04em;
+            letter-spacing:
+                0.04em;
         }
 
 
@@ -1341,7 +1647,10 @@ const AppShellStyles = () => (
         .side-link-label,
 
         .sidebar-collapsed
-        .brand-accent {
+        .brand-accent,
+
+        .sidebar-collapsed
+        .side-link-number {
             display: none;
         }
 
@@ -1356,8 +1665,7 @@ const AppShellStyles = () => (
         .side-link {
             justify-content: center;
 
-            padding:
-                10px;
+            padding: 10px;
         }
 
 
@@ -1388,11 +1696,18 @@ const AppShellStyles = () => (
             overscroll-behavior:
                 contain;
 
-            scrollbar-gutter: stable;
+            scrollbar-gutter:
+                stable;
 
             scrollbar-width: thin;
+
             scrollbar-color:
-                rgba(255,255,255,0.14)
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.14
+                )
                 transparent;
         }
 
@@ -1403,13 +1718,19 @@ const AppShellStyles = () => (
 
 
         .shell-content::-webkit-scrollbar-track {
-            background: transparent;
+            background:
+                transparent;
         }
 
 
         .shell-content::-webkit-scrollbar-thumb {
             background:
-                rgba(255,255,255,0.14);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.14
+                );
 
             border-radius: 999px;
         }
@@ -1417,15 +1738,33 @@ const AppShellStyles = () => (
 
         .shell-content::-webkit-scrollbar-thumb:hover {
             background:
-                rgba(255,255,255,0.22);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.22
+                );
         }
 
 
-        /* Prevent pages from creating another horizontal scroll */
-
         .shell-content > * {
             min-width: 0;
+
             max-width: 100%;
+        }
+
+
+        /* =====================================================
+           SITE FOOTER POSITIONING
+        ===================================================== */
+
+        .shell-content > .site-footer {
+            width: 100%;
+
+            max-width: none;
+
+            margin-left: 0;
+            margin-right: 0;
         }
 
 
@@ -1458,13 +1797,20 @@ const AppShellStyles = () => (
         }
 
 
-        @media (prefers-reduced-motion: reduce) {
+        @media (
+            prefers-reduced-motion: reduce
+        ) {
+
             .app-frame *,
             .app-frame *::before,
             .app-frame *::after {
-                animation: none !important;
-                transition: none !important;
+                animation:
+                    none !important;
+
+                transition:
+                    none !important;
             }
+
         }
 
 
@@ -1476,7 +1822,10 @@ const AppShellStyles = () => (
 
             .topbar {
                 gap: 10px;
-                padding: 0 14px;
+
+                padding:
+                    0
+                    14px;
             }
 
 
@@ -1503,14 +1852,19 @@ const AppShellStyles = () => (
 
             .app-frame {
                 width: 100%;
+
                 height: 100vh;
+
                 min-height: 100vh;
 
                 grid-template-columns: 1fr;
 
                 grid-template-rows:
                     var(--topbar-h)
-                    minmax(0, 1fr);
+                    minmax(
+                        0,
+                        1fr
+                    );
 
                 grid-template-areas:
                     "topbar"
@@ -1532,6 +1886,7 @@ const AppShellStyles = () => (
                     88px;
 
                 overflow-x: hidden;
+
                 overflow-y: auto;
             }
 
@@ -1551,18 +1906,27 @@ const AppShellStyles = () => (
                 height: 60px;
 
                 display: flex;
+
                 align-items: center;
-                justify-content: space-around;
+
+                justify-content:
+                    space-around;
 
                 padding:
                     4px
                     8px;
 
                 background:
-                    rgba(27, 29, 36, 0.96);
+                    rgba(
+                        27,
+                        29,
+                        36,
+                        0.96
+                    );
 
                 border-top:
-                    1px solid var(--border);
+                    1px solid
+                    var(--border);
 
                 backdrop-filter:
                     blur(14px);
@@ -1578,7 +1942,9 @@ const AppShellStyles = () => (
                 min-width: 0;
 
                 display: flex;
+
                 flex-direction: column;
+
                 align-items: center;
 
                 gap: 3px;
@@ -1587,7 +1953,8 @@ const AppShellStyles = () => (
                     5px
                     8px;
 
-                color: var(--text-muted);
+                color:
+                    var(--text-muted);
 
                 font-size: 10.5px;
 
@@ -1596,7 +1963,8 @@ const AppShellStyles = () => (
 
 
             .mobile-nav a.active {
-                color: var(--accent);
+                color:
+                    var(--accent);
             }
 
 
@@ -1609,7 +1977,10 @@ const AppShellStyles = () => (
                 position: fixed;
 
                 top:
-                    calc(var(--topbar-h) - 4px);
+                    calc(
+                        var(--topbar-h)
+                        - 4px
+                    );
 
                 right: 10px;
             }
@@ -1625,7 +1996,10 @@ const AppShellStyles = () => (
 
             .topbar {
                 gap: 8px;
-                padding: 0 10px;
+
+                padding:
+                    0
+                    10px;
             }
 
 
@@ -1669,7 +2043,8 @@ const AppShellStyles = () => (
                 width: 38px;
                 height: 38px;
 
-                justify-content: center;
+                justify-content:
+                    center;
 
                 padding: 0;
             }
@@ -1685,6 +2060,11 @@ const AppShellStyles = () => (
                     18px
                     12px
                     84px;
+            }
+
+
+            .site-footer {
+                margin-top: 48px;
             }
 
         }
