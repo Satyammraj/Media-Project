@@ -65,10 +65,33 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
     const skip = (pageNumber - 1) * limitNumber
 
-    const videos = await Video.find(filter)
-        .sort(sort)
-        .skip(skip)
-        .limit(limitNumber)
+    const videos = await Video.aggregate([
+        { $match: filter },
+        { $sort: sort },
+        { $skip: skip },
+        { $limit: limitNumber },
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner",
+                pipeline: [
+                    {
+                        $project: {
+                            username: 1,
+                            fullName: 1,
+                            avatar: 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $unwind: "$owner"
+        }
+    ])
+
 
     
     return res
@@ -170,10 +193,50 @@ const getVideoById = asyncHandler(async (req, res) => {
         )
     }
 
-    const video = await Video.findOne({
-        _id: videoId,
-        isPublished: true
-    })
+    const video = await Video.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(videoId), isPublished: true } },
+    {
+        $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "owner",
+            pipeline: [
+                {
+                    $lookup: {
+                        from: "subscriptions",
+                        localField: "_id",
+                        foreignField: "channel",
+                        as: "subscribers"
+                    }
+                },
+                {
+                    $addFields: {
+                        isSubscribed: {
+                            $in: [req.user?._id, "$subscribers.subscriber"]
+                        }
+                    }
+                },
+                { $project: { username: 1, fullName: 1, avatar: 1, isSubscribed: 1 } }
+            ]
+        }
+    },
+    { $unwind: "$owner" },
+    {
+        $lookup: {
+            from: "likes",
+            localField: "_id",
+            foreignField: "video",
+            as: "likes"
+        }
+    },
+    {
+        $addFields: {
+            isLiked: { $in: [req.user?._id, "$likes.likedBy"] }
+        }
+    }
+    ]).then(res => res[0])
+
 
     if (!video) {
         throw new ApiError(
