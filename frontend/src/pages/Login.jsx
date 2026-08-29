@@ -28,6 +28,7 @@ const Login = () => {
     const isMountedRef = useRef(true);
 
     useEffect(() => {
+        isMountedRef.current = true; //fix login keep loading issue
         return () => {
             isMountedRef.current = false;
         };

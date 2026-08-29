@@ -38,6 +38,7 @@ const Register = () => {
     const isMountedRef = useRef(true);
 
     useEffect(() => {
+        isMountedRef.current = true;//fix loading login
         return () => {
             isMountedRef.current = false;
         };
