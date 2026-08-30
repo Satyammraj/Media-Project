@@ -57,20 +57,21 @@ const registerUser = asyncHandler(async (req,res)=>{
     }
 
 
-    if(!avatarLocalPath){
-        throw new ApiError(400,"Avatar image is required")
-    }
+    const avatar = avatarLocalPath
+        ? await uploadOnCloudinary(avatarLocalPath)
+        : null;
 
-    const avatar = await uploadOnCloudinary(avatarLocalPath)
-    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+    const coverImage = coverImageLocalPath
+        ? await uploadOnCloudinary(coverImageLocalPath)
+        : null;
 
-    if(!avatar){
+    if(avatarLocalPath && !avatar){
         throw new ApiError(400,"Avatar image upload failed")
     }
 
     const user = await User.create({
         fullName,
-        avatar: avatar.url,
+        avatar: avatar?.url,
         coverImage: coverImage?.url || "",
         email,
         username: username.toLowerCase(),
@@ -324,6 +325,7 @@ const updateUserCoverImage = asyncHandler(async(req,res)=>{
 
 const getUserChannelProfile =  asyncHandler(async(req,res)=>{
     const {username} = req.params
+    const requestingUserId = req.user?._id;
 
     if (!username?.trim()){
         throw new ApiError(400,"Username is missing")
@@ -362,7 +364,12 @@ const getUserChannelProfile =  asyncHandler(async(req,res)=>{
                 isSubscribed:{
                     $cond:{
                         if: requestingUserId
-                            ? {$in:[requestingUserId,"$subscribers.subscriber"]}
+                            ? {
+                                  $in: [
+                                      new mongoose.Types.ObjectId(requestingUserId),
+                                      "$subscribers.subscriber"
+                                  ]
+                              }
                             : false,
                         then: true,
                         else: false
