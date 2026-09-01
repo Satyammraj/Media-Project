@@ -245,6 +245,10 @@ const getVideoById = asyncHandler(async (req, res) => {
         )
     }
 
+    // Increment view count atomically, then reflect it in the response payload
+    await Video.findByIdAndUpdate(videoId, { $inc: { views: 1 } })
+    video.views += 1
+
     return res
         .status(200)
         .json(

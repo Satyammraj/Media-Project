@@ -12,6 +12,7 @@ import LibraryPage from "./pages/LibraryPage";
 
 import AppShell from "./components/AppShell";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop"
 
 const NotFoundStyles = () => (
     <style>{`
@@ -97,7 +98,10 @@ const NotFound = () => {
 
 function App() {
     return (
-        <Routes>
+        <>
+
+            <ScrollToTop />
+            <Routes>
             {/* ───────────────── PUBLIC AUTH ───────────────── */}
 
             <Route
@@ -175,6 +179,7 @@ function App() {
                 />
             </Route>
         </Routes>
+        </>
     );
 }
 
