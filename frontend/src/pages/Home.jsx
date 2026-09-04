@@ -456,78 +456,7 @@ const Home = () => {
             </section>
 
 
-            {/* ==================================================
-                STATS
-            ================================================== */}
 
-            {!hasSearch &&
-                !loading &&
-                !error && (
-
-                    <section
-                        className="home-stats"
-                        aria-label="Videoly statistics"
-                    >
-
-                        <div className="stats-label">
-                            PLATFORM
-                            <br />
-                            INDEX
-                        </div>
-
-
-                        <div className="home-stat">
-
-                            <span className="home-stat-number">
-                                {formatStatNumber(
-                                    stats.videos
-                                )}
-                            </span>
-
-                            <span className="home-stat-label">
-                                Videos
-                            </span>
-
-                        </div>
-
-
-                        <div className="home-stat-divider" />
-
-
-                        <div className="home-stat">
-
-                            <span className="home-stat-number">
-                                {formatStatNumber(
-                                    stats.creators
-                                )}
-                            </span>
-
-                            <span className="home-stat-label">
-                                Creators
-                            </span>
-
-                        </div>
-
-
-                        <div className="home-stat-divider" />
-
-
-                        <div className="home-stat">
-
-                            <span className="home-stat-number">
-                                {formatStatNumber(
-                                    stats.views
-                                )}
-                            </span>
-
-                            <span className="home-stat-label">
-                                Views
-                            </span>
-
-                        </div>
-
-                    </section>
-                )}
 
 
             {/* ==================================================
